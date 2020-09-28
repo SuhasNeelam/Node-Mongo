@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Management</title>
+</head>
+
+<body>
+  <h2> List of Hospitals</h2>
+  <ul>
+    <% for(var i = 0; i < hospitals.length; i++) {%>
+    <li>
+      <span>Name:&nbsp<%= hospitals[i].hname %></span>:
+      <span>ID:&nbsp<%= hospitals[i].haddress %></span>
+      <span>Ventilators Available:&nbsp<%= hospitals[i].hvent %></span>
+    </li>
+    <% } %>
+  </ul>
+  <div>
+    <h2>Remove Hospital</h2>
+    <p>
+      Hospital Name:
+      <input id="hname" name="del" type="text" />
+    </p>
+    <button id="delete-button">Delete Hospital</button>
+  </div>
+  <div id="messageDiv"></div>
+  <h2>Click here to Post a Hospital</h2>
+  <form action="/" method="GET">
+    <input type="submit" value="GET ALL HOSPITALS">
+  </form>
+  <script src="/main.js"></script>
+</body>
+
+</html>
