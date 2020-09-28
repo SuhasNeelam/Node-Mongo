@@ -27,5 +27,15 @@
     <form action="/hospitals" method="GET">
     <input type="submit" value="GET ALL HOSPITALS">
     </form>
+    <h2>POST Ventilators</h2>
+    <form action="/ventilators" method="post">
+      <p>Hospital Name: <input type="text" name="hname"></p>
+      <p>Number of Ventilators <input type="text" name="ventno"></p>
+      <input type="submit" value="Submit">
+    </form>
+    <h2>Click here to check total number of Ventilators</h2>
+    <form action="/ventilators" method="get">
+      <input type="submit" value="TOTAL VENTILATORS">
+    </form>
   </body>
 </html>
