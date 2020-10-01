@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Management</title>
+</head>
+<body>
+  <h1>Welcome to Hospital Management Website</h1>
+  <h2>Authentication Mandatory</h2>
+  <br>
+  <hr>
+  <h3>Signup</h3>
+  <form action="/signup" method="post">
+    <p>
+      Username:
+      <input type="text" name="username">
+    </p>
+    <p>
+      Role:
+      User<input type="radio" name="role" value="regular">
+      Administrator<input type="radio" name="role" value="admin">
+    </p>
+    <p>
+      Password:
+      <input type="password" name="password">
+    </p>
+    <input type="submit" value="Signup">
+  </form>
+  <hr>
+  <br>
+  <h3>Login</h3>
+  <form action="/login" method="post">
+    <p>
+      Username:
+      <input type="text" name="username">
+    </p>
+    <p>
+      Password:
+      <input type="password" name="password">
+    </p>
+    <input type="submit" value="Login">
+  </form>
+  <script>
+    localStorage.setItem('token')
+  </script>
+</body>
+</html>

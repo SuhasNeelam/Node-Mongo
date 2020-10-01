@@ -1,7 +1,10 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-
+const jwt = require('jsonwebtoken');
+const dotenv = require("dotenv");
+const Auth = require("./auth");
+dotenv.config();
 
 var MongoClient = require("mongodb").MongoClient;
 var url = "mongodb://127.0.0.1:27017/hospitalInventory";
@@ -18,11 +21,18 @@ MongoClient.connect(url)
     db = client.db('hospitalInventory');
     hospCollection = db.collection('hospitals');
     ventCollection = db.collection('ventilators');
+    userCollection = db.collection('users');
 
-  })
+  });
 
 
 app.get("/", (req, res) => {
+  res.sendFile(
+    "/Users/asus/OneDrive/Desktop/All_Web/Proj/preFS/hosp" +
+      "/auth.html"
+  );
+});
+app.get("/home", (req, res) => {
   res.sendFile(
     "/Users/asus/OneDrive/Desktop/All_Web/Proj/preFS/hosp" +
       "/index.html"
@@ -31,16 +41,20 @@ app.get("/", (req, res) => {
 app.post('/hospitals', (req, res) => {
   hospCollection.findOne({hname:req.body.hname})
   .then(result => {
-    console.log("Already Exists");
-    res.redirect('/');
+    if(result===null){
+      hospCollection.insertOne(req.body)
+        .then(result => {
+          console.log(result.result);
+          res.redirect('/home');
+        })
+        .catch(error => console.error(error))
+    }
+    else  
+      console.log("Already Exists");
+    res.redirect('/home');
   })
-  .catch(() => {
-    hospCollection.insertOne(req.body)
-      .then(result => {
-        console.log(result.result);
-        res.redirect('/');
-      })
-      .catch(error => console.error(error))
+  .catch((err) => {
+    console.log(err);
   })
 });
 app.get('/hospitals', (req, res) => {
@@ -73,7 +87,7 @@ app.post('/ventilators', (req, res) => {
     let no = result.hvent;
     hospCollection.updateOne({ hname: req.body.hname }, { $set: { hvent: parseInt(no) + parseInt(req.body.ventno) } })
       .then((obj) => {
-        res.redirect('/');
+        res.redirect('/home');
       })
       .catch((err) => {
         console.log(err);
@@ -95,7 +109,7 @@ app.post('/ventilators', (req, res) => {
     ventCollection.insertOne(req.body)
       .then(result => {
         console.log(result.result);
-        res.redirect('/');
+        res.redirect('/home');
       })
       .catch(error => console.error(error))
   });
@@ -114,9 +128,43 @@ app.get('/ventilators', (req, res) => {
     .catch(error => console.error(error))
 });
 
-
-
-
+app.post('/signup', async (req, res) => {
+  
+  const { username, password, role } = req.body;
+  const user =  await userCollection.findOne({username:username});
+  if (user) {
+    res.send('User Already Exists');
+    res.redirect('/');
+  } else {
+    db.collection("userCollection").insertOne(req.body)
+    .then(result=>{
+      // console.log(result);
+      console.log("User Succesfully created");
+      res.redirect('/');
+    })
+    .catch(err=>console.log(err));
+  }
+});
+app.post('/login', async (req, res) => {
+  const user = await db.collection("userCollection").findOne({username:req.body.username,password:req.body.password});
+  console.log(user);
+  if (user) {
+    const accessTokenSecret = "monkeyddragonhasthehighestbountyinonepiece";
+    const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret);
+    res.json({
+      accessToken
+    });
+  } else {
+    res.send('Username or password incorrect');
+  }
+});
+app.get('/users',Auth.authenticateJWT, (req,res) => {
+  db.collection("userCollection").find().toArray()
+  .then(result=>{
+    res.json(result);
+  })
+  .catch(err=>console.log(err));
+})
 app.listen(3000, function () {
   console.log("listening on 3000");
 });
