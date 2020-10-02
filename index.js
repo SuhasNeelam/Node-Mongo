@@ -33,12 +33,13 @@ app.get("/", (req, res) => {
   );
 });
 app.get("/home", (req, res) => {
-  res.sendFile(
+  res.render(
     "/Users/asus/OneDrive/Desktop/All_Web/Proj/preFS/hosp" +
-      "/index.html"
+    "/views/server.ejs"
   );
 });
-app.post('/hospitals', (req, res) => {
+app.post('/hospitals', Auth.isAdmin, (req, res) => {
+  // console.log("post"+req); 
   hospCollection.findOne({hname:req.body.hname})
   .then(result => {
     if(result===null){
@@ -80,7 +81,7 @@ app.delete('/hospitals', (req, res) => {
 });
 
 
-app.post('/ventilators', (req, res) => {
+app.post('/ventilators', Auth.isAdmin, (req, res) => {
  let exists; 
  db.collection("hospitals").findOne({ hname: req.body.hname })
   .then(result => {
@@ -151,9 +152,10 @@ app.post('/login', async (req, res) => {
   if (user) {
     const accessTokenSecret = "monkeyddragonhasthehighestbountyinonepiece";
     const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret);
-    res.json({
-      accessToken
-    });
+    // res.json({
+    //   accessToken
+    // });
+    res.render('server.ejs', { authToken : accessToken });
   } else {
     res.send('Username or password incorrect');
   }

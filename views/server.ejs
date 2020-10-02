@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Management</title>
+  </head>
+  <body>
+    <h1>Hospital Management System</h1>
+    <h2>POST HOSPITAL</h2>
+    <form action="" onsubmit="event.preventDefault(); postHosp()" method="POST">
+      <p>
+      Hospital Name : 
+      <input type="text" id="Hname" name="hname">
+      </p>
+      <p>
+        Hospital ID :
+        <input type="text" id="Hid" name="haddress">
+      </p>
+      <p>
+        Ventilators Available :
+        <input type="text" id="Hvent"  name="hvent">
+      </p>
+      <button type="submit">Submit</button>
+    </form>
+    <h2>Click here to view all Hospitals</h2>
+    <form action="/hospitals" method="GET">
+    <input type="submit" value="GET ALL HOSPITALS">
+    </form>
+    <h2>POST Ventilators</h2>
+    <form action="" onsubmit="event.preventDefault(); postVent();" method="post">
+      <p>Hospital Name: <input type="text" id="Vhname" name="hname"></p>
+      <p>Number of Ventilators <input type="text" id="Vno" name="ventno"></p>
+      <input type="submit" value="Submit">
+    </form>
+    <h2>Click here to check total number of Ventilators</h2>
+    <form action="/ventilators" method="get">
+      <input type="submit" value="TOTAL VENTILATORS">
+    </form>
+    <% var tokenx = JSON.stringify(authToken); %> 
+    <script type='text/javascript'>
+      // console.log(token);
+      localStorage.setItem("token", <%-tokenx%> );
+    </script>
+    <script>
+      function postHosp(){
+        
+        var hname = document.getElementById("Hname").value;
+        var haddress = document.getElementById("Hid").value;
+        var hvent = document.getElementById("Hvent").value;
+        // console.log(hname,haddress,hvent);
+        fetch("/hospitals",{
+          method: 'post',
+          headers: new Headers({
+            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            'Content-Type': 'application/json'
+          }),
+          body: JSON.stringify({
+            "hname":hname,
+            "haddress":haddress,
+            "hvent":hvent
+          })
+        })
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
+      }
+      function postVent(){
+        
+        var hname = document.getElementById("Vhname").value;
+        var vent = document.getElementById("Vno").value;
+        // console.log(hname,haddress,hvent);
+        fetch("/hospitals",{
+          method: 'post',
+          headers: new Headers({
+            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            'Content-Type': 'application/json'
+          }),
+          body: JSON.stringify({
+            "hname":hname,
+            "ventno":vent
+          })
+        })
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
+      }
+    </script>
+  </body>
+</html>
