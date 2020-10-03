@@ -79,16 +79,26 @@ app.delete('/hospitals', (req, res) => {
   })
   .catch(error => console.error(error));
 });
+app.delete('/hospitalsAll', (req, res) => {
+  hospCollection.deleteMany()
+  .then(result => {
+    if (result.deletedCount === 0) {
+      return res.json('No hospital to delete');
+    }
+    res.json(`Deleted Hospital`);
+  })
+  .catch(error => console.error(error));
+});
 
 
-app.post('/ventilators', Auth.isAdmin, (req, res) => {
+app.post('/ventilators', (req, res) => {
  let exists; 
  db.collection("hospitals").findOne({ hname: req.body.hname })
   .then(result => {
     let no = result.hvent;
     hospCollection.updateOne({ hname: req.body.hname }, { $set: { hvent: parseInt(no) + parseInt(req.body.ventno) } })
       .then((obj) => {
-        res.redirect('/home');
+        res.redirect('/ventilators');
       })
       .catch((err) => {
         console.log(err);
@@ -167,6 +177,8 @@ app.get('/users',Auth.authenticateJWT, (req,res) => {
   })
   .catch(err=>console.log(err));
 })
+
+
 app.listen(3000, function () {
   console.log("listening on 3000");
 });

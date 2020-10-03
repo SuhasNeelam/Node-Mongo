@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node pm2.js",
     "restart": "node pm2.js crud-demo --update-env",
-    "dev": "nodemon server.js",
+    "dev": "nodemon index.js",
     "sync": "node sync.js"
   },
   "author": "Zell Liew <zellwk@gmail.com> (https://zellwk.com)",

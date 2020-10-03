@@ -28,7 +28,7 @@
     <input type="submit" value="GET ALL HOSPITALS">
     </form>
     <h2>POST Ventilators</h2>
-    <form action="" onsubmit="event.preventDefault(); postVent();" method="post">
+    <form action="/ventilators"  method="post">
       <p>Hospital Name: <input type="text" id="Vhname" name="hname"></p>
       <p>Number of Ventilators <input type="text" id="Vno" name="ventno"></p>
       <input type="submit" value="Submit">
@@ -64,25 +64,25 @@
         .then(res=>console.log(res))
         .catch(err=>console.log(err))
       }
-      function postVent(){
+      // function postVent(){
         
-        var hname = document.getElementById("Vhname").value;
-        var vent = document.getElementById("Vno").value;
-        // console.log(hname,haddress,hvent);
-        fetch("/hospitals",{
-          method: 'post',
-          headers: new Headers({
-            'Authorization': 'Bearer ' + localStorage.getItem("token"),
-            'Content-Type': 'application/json'
-          }),
-          body: JSON.stringify({
-            "hname":hname,
-            "ventno":vent
-          })
-        })
-        .then(res=>console.log(res))
-        .catch(err=>console.log(err))
-      }
+      //   var hname = document.getElementById("Vhname").value;
+      //   var vent = document.getElementById("Vno").value;
+      //   // console.log(hname,haddress,hvent);
+      //   fetch("/hospitals",{
+      //     method: 'post',
+      //     headers: new Headers({
+      //       'Authorization': 'Bearer ' + localStorage.getItem("token"),
+      //       'Content-Type': 'application/json'
+      //     }),
+      //     body: JSON.stringify({
+      //       "hname":hname,
+      //       "ventno":vent
+      //     })
+      //   })
+      //   .then(res=>console.log(res))
+      //   .catch(err=>console.log(err))
+      // }
     </script>
   </body>
 </html>
